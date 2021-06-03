@@ -4,6 +4,14 @@ from flask import Flask, jsonify, json, render_template, request, url_for, redir
 from werkzeug.exceptions import abort
 import logging
 
+COUNT = 0
+
+
+def increment_hits_counter():
+    global COUNT
+    COUNT = COUNT + 1
+
+
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
@@ -82,6 +90,22 @@ def healthcheck():
     )
 
     app.logger.info('Status request successful')
+    return response
+
+
+@app.route('/metrics')
+def metrics():
+    # Total amount of posts in the database
+    connection = get_db_connection()
+    postCount = connection.execute('SELECT * FROM posts').fetchall()
+    connection.close()
+    response = app.response_class(
+        response=json.dumps(
+            {"db_connection_count": COUNT, "post_count": str(len(postCount))}),
+        status=200,
+        mimetype='application/json'
+    )
+    app.logger.info('Metrics request successful')
     return response
 
 
