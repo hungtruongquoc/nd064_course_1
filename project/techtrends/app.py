@@ -31,7 +31,7 @@ def get_post(post_id):
 
 # Define the Flask application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
+app.config['SECRET_KEY'] = 'my_secret_is_here'
 
 
 # Define the main route of the web application
@@ -60,6 +60,7 @@ def post(post_id):
 # Define the About Us page
 @app.route('/about')
 def about():
+    app.logger.info('About page successfully retrieved!')
     return render_template('about.html')
 
 
@@ -78,7 +79,7 @@ def create():
                                (title, content))
             connection.commit()
             connection.close()
-
+            app.logger.info('Article \"%s" successfully created!', title)
             return redirect(url_for('index'))
 
     return render_template('create.html')
