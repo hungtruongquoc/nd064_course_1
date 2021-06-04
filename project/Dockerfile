@@ -1,7 +1,7 @@
 FROM python:3.8-alpine
 LABEL maintainer="Hung Truong"
 
-COPY ./techtrends /app
+COPY ./project/techtrends /app
 WORKDIR /app
 RUN pip install --upgrade setuptools && pip install -r requirements.txt && python init_db.py
 
