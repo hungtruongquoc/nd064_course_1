@@ -15,6 +15,7 @@ def increment_hits_counter():
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
+    increment_hits_counter()
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
     return connection
@@ -111,6 +112,12 @@ def metrics():
     )
     app.logger.info('Metrics request successful')
     return response
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    app.logger.error('Page could not be found')
+    return 'This page does not exist', 404
 
 
 # start the application on port 3111
