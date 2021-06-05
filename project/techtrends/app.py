@@ -1,6 +1,7 @@
 import sqlite3
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+import sys
 from werkzeug.exceptions import abort
 import logging
 
@@ -122,5 +123,10 @@ def page_not_found(e):
 
 # start the application on port 3111
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    handlers = [stderr_handler, stdout_handler]
+    # format output
+    format_output = '%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s'
+    logging.basicConfig(level=logging.DEBUG, handlers=handlers, format=format_output)
     app.run(host='0.0.0.0', port='3111')
